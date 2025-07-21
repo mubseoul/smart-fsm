@@ -690,21 +690,172 @@ All routes use XSS middleware - maintain this pattern.
 -   Use Gates for complex permission logic
 -   Respect parent_id hierarchy in all queries
 
-## Language & Localization
+## Language & Localization System
 
-### Supported Languages
+### Supported Languages (13 Languages)
 
-English, Arabic, Spanish, French, German, Italian, Dutch, Japanese, Polish, Portuguese, Russian, Danish
+Smart FSM provides comprehensive **multi-language support** with **13 fully translated languages**:
 
-### Translation Pattern
+1. **English** (Default) - `english`
+2. **Arabic** - `arabic` (RTL support)
+3. **Spanish** - `spanish`
+4. **French** - `french`
+5. **German** - `german`
+6. **Italian** - `italian`
+7. **Dutch** - `dutch`
+8. **Japanese** - `japanese`
+9. **Polish** - `polish`
+10. **Portuguese** - `portuguese`
+11. **Russian** - `russian`
+12. **Danish** - `danish`
+
+### Language System Architecture
+
+#### File Structure
+
+```
+resources/lang/
+├── english.json (706 translation keys)
+├── arabic.json (705 translation keys)
+├── spanish.json (705 translation keys)
+├── french.json (705 translation keys)
+├── german.json (705 translation keys)
+├── italian.json (705 translation keys)
+├── dutch.json (705 translation keys)
+├── japanese.json (705 translation keys)
+├── polish.json (705 translation keys)
+├── portuguese.json (705 translation keys)
+├── russian.json (705 translation keys)
+├── danish.json (705 translation keys)
+├── english/ (directory with installer translations)
+├── arabic/ (directory with installer translations)
+└── [other language directories]
+```
+
+#### Translation Pattern
 
 ```php
 {{ __('Text to translate') }}
 ```
 
-### RTL Support
+#### User Language Management
 
-System supports RTL languages with proper CSS handling.
+-   **User Field**: `users.lang` stores user's preferred language
+-   **Default**: New users get 'english' as default language
+-   **Switching**: Users can change language via header dropdown
+-   **Route**: `GET /language/{lang}` - `SettingController::languageChange()`
+-   **Persistence**: Language preference saved to user profile
+
+### Language Features
+
+#### RTL (Right-to-Left) Support
+
+-   **Arabic Language**: Full RTL layout support
+-   **CSS Classes**: Automatic RTL styling
+-   **JavaScript**: `layout_rtl_change()` function handles RTL switching
+-   **HTML Attributes**: `dir="rtl"` and `lang="ar"` set automatically
+
+#### Dynamic Language Loading
+
+```php
+// Set application locale based on user preference
+\App::setLocale(\Auth::user()->lang);
+
+// Guest users get super admin's language
+$user = \App\Models\User::find(1);
+\App::setLocale($user->lang);
+```
+
+#### Language Detection
+
+```php
+// Custom::languages() method scans language directories
+public static function languages()
+{
+    $directory = base_path() . '/resources/lang/';
+    $allFiles = glob($directory . "*", GLOB_ONLYDIR);
+    // Returns array of available language codes
+}
+```
+
+### User Interface Integration
+
+#### Header Language Selector
+
+-   **Location**: Top navigation bar (language icon)
+-   **Display**: Dropdown with all available languages
+-   **Active State**: Current language highlighted
+-   **Route**: `/language/{lang}` for switching
+
+#### Language Context Setting
+
+-   **Authentication**: Language set on login (`XSS` middleware)
+-   **Registration**: Language set for registration pages
+-   **Guest Access**: Uses super admin's language setting
+-   **Persistence**: Language preference maintained across sessions
+
+### Translation Coverage
+
+#### Comprehensive Translation Areas
+
+-   **Authentication**: Login, registration, password reset
+-   **User Management**: User creation, roles, permissions
+-   **Business Operations**: Work orders, assets, invoices
+-   **System Settings**: All configuration screens
+-   **Email Templates**: All notification emails
+-   **UI Elements**: Buttons, labels, messages, validation
+-   **Error Messages**: Complete error handling
+-   **Success Messages**: All confirmation messages
+
+#### Translation Statistics
+
+-   **English**: 706 translation keys (reference language)
+-   **Other Languages**: 705 translation keys each
+-   **Coverage**: ~99.9% translation completeness
+-   **Maintenance**: Regular updates with new features
+
+### Technical Implementation
+
+#### Middleware Integration
+
+```php
+// XSS Middleware sets user language and timezone
+if (\Auth::check()) {
+    \App::setLocale(\Auth::user()->lang);
+    $timezone = getSettingsValByName('timezone');
+    \Config::set('app.timezone', $timezone);
+}
+```
+
+#### Database Storage
+
+-   **User Language**: Stored in `users.lang` field
+-   **Default Value**: 'english' for new registrations
+-   **Admin Override**: Super admin language affects guest users
+
+#### Email Localization
+
+-   **Template Translation**: All email templates support localization
+-   **Dynamic Content**: Email content translated based on recipient's language
+-   **Multi-tenant**: Each organization can have different language preferences
+
+### Language Management Workflow
+
+#### For Users
+
+1. **Registration**: Gets default language ('english')
+2. **Language Selection**: Choose from header dropdown
+3. **Instant Switch**: Language changes immediately
+4. **Persistence**: Preference saved to database
+
+#### For Administrators
+
+1. **System Language**: Super admin language affects guest users
+2. **User Management**: Can see users' language preferences
+3. **Email Templates**: Translated based on recipient language
+4. **Multi-tenant**: Each organization maintains language preferences
+
+This comprehensive language system ensures **Smart FSM can serve global markets** with native language support for diverse user bases across different regions and cultures.
 
 ## Common Development Tasks
 

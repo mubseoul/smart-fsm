@@ -82,6 +82,31 @@ $subscription->getTrialDurationText() // "30 days" or "No Trial"
 -   **Assignment**: `assignSubscription()` checks trial first, then intervals
 -   **Display**: Shows trial badges in pricing tables
 
+## 🌐 Language Support (13 Languages)
+
+**Supported Languages:**
+
+-   English (default), Arabic (RTL), Spanish, French, German, Italian
+-   Dutch, Japanese, Polish, Portuguese, Russian, Danish
+
+**Key Features:**
+
+-   **706 translation keys** in English (reference)
+-   **705 translation keys** per language (~99.9% coverage)
+-   **RTL support** for Arabic with automatic CSS handling
+-   **User preference** stored in `users.lang` field
+-   **Dynamic switching** via header dropdown
+
+**Implementation:**
+
+```php
+\App::setLocale(\Auth::user()->lang);  // Set user language
+{{ __('Text to translate') }}          // Translation pattern
+Route: /language/{lang}                // Language switching
+```
+
+**Files:** `resources/lang/{language}.json` + installer directories
+
 ## 💳 SaaS Subscription System
 
 **Core Tables**: `subscriptions`, `package_transactions`, `coupons`

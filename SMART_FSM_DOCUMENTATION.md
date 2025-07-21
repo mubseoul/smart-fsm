@@ -112,14 +112,25 @@ WO Request → Estimation → Work Order → Service Appointment → Invoice
 -   **Contact Diary**: Communication logging
 -   **Notice Board**: Internal announcements
 
-### 7. Reporting & Analytics
+### 7. Language & Localization
 
--   Dashboard analytics for different user types
--   Revenue tracking and reporting
--   Work order statistics
--   User activity monitoring
+#### Multi-Language Support (13 Languages)
 
-### 8. CMS Features
+-   **Supported Languages**: English, Arabic, Spanish, French, German, Italian, Dutch, Japanese, Polish, Portuguese, Russian, Danish
+-   **Translation Files**: JSON format with 700+ translation keys
+-   **RTL Support**: Full right-to-left layout for Arabic
+-   **User Preferences**: Individual language selection per user
+-   **Dynamic Switching**: Real-time language changes via UI
+
+#### Localization Features
+
+-   **User Interface**: Complete UI translation
+-   **Email Templates**: Localized notification emails
+-   **Error Messages**: Translated validation and error messages
+-   **Date/Time Formats**: Locale-specific formatting
+-   **Currency Display**: Multi-currency support with localization
+
+### 8. Content Management System
 
 -   **Landing Page**: Customizable homepage
 -   **Custom Pages**: Dynamic page creation

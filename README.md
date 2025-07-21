@@ -168,6 +168,50 @@ MAIL_PASSWORD=your_password
 
 -   **[SMART_FSM_DOCUMENTATION.md](SMART_FSM_DOCUMENTATION.md)**: Complete technical documentation
 -   **[SMART_FSM_CLAUDE_CONTEXT.md](SMART_FSM_CLAUDE_CONTEXT.md)**: AI assistant context file
+-   **[DATABASE_AND_REGISTRATION_ANALYSIS.md](DATABASE_AND_REGISTRATION_ANALYSIS.md)**: Database structure and registration flow analysis
+
+### AI Context Files
+
+This project includes comprehensive context files to help AI assistants (like Claude) understand the system:
+
+#### 🤖 For AI Assistants (Claude, ChatGPT, etc.)
+
+**Primary Context File**: `SMART_FSM_CLAUDE_CONTEXT.md`
+
+-   Complete user roles and hierarchy
+-   Database structure overview
+-   Registration flow details
+-   Essential functions and patterns
+-   Security considerations
+-   Development guidelines
+
+**Additional Context Files**:
+
+-   `SMART_FSM_DOCUMENTATION.md`: Technical documentation
+-   `DATABASE_AND_REGISTRATION_ANALYSIS.md`: Detailed database analysis
+
+#### 📋 How to Preserve Information for AI
+
+1. **Update Context Files**: Add new information to `SMART_FSM_CLAUDE_CONTEXT.md`
+2. **Use Descriptive Commits**: Include context in git commit messages
+3. **Document Changes**: Update relevant .md files when making system changes
+4. **Code Comments**: Add detailed comments for complex business logic
+
+#### 🔄 Keeping AI Context Updated
+
+When making significant changes:
+
+```bash
+# 1. Update the context file
+vim SMART_FSM_CLAUDE_CONTEXT.md
+
+# 2. Commit with descriptive message
+git add .
+git commit -m "feat: Add new payment gateway - update AI context"
+
+# 3. Document in relevant files
+# Update SMART_FSM_DOCUMENTATION.md if needed
+```
 
 ### Default Login Credentials
 

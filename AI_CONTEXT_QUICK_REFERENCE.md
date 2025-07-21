@@ -53,6 +53,35 @@ $companyName = $settings['company_name'];
 
 **Used in**: Email templates, invoices, work orders, system branding
 
+## 🎁 Trial System
+
+**Database Fields**: `trial_enabled`, `trial_days` in subscriptions table
+
+### Global Settings (Super Admin)
+
+-   **Settings → General → Trial System Settings**
+-   `trial_system_enabled`: on/off toggle
+-   `default_trial_days`: 1-365 days
+
+### Per-Subscription Settings
+
+-   **Trial Enabled**: Per-package toggle
+-   **Trial Days**: Custom duration (1-365)
+
+### Key Methods
+
+```php
+$subscription->hasTrialEnabled()      // Check if trial enabled
+$subscription->getTrialDays()         // Get trial days (0 if disabled)
+$subscription->getTrialDurationText() // "30 days" or "No Trial"
+```
+
+### Trial Logic
+
+-   **Registration**: Uses subscription trial settings for expiry date
+-   **Assignment**: `assignSubscription()` checks trial first, then intervals
+-   **Display**: Shows trial badges in pricing tables
+
 ## 💳 SaaS Subscription System
 
 **Core Tables**: `subscriptions`, `package_transactions`, `coupons`

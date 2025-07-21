@@ -43,6 +43,7 @@ class SubscriptionController extends Controller
                     'interval' => 'required',
                     'user_limit' => 'required',
                     'client_limit' => 'required',
+                    'trial_days' => 'required_if:trial_enabled,1|integer|min:1|max:365',
                 ]
             );
             if ($validator->fails()) {
@@ -58,6 +59,8 @@ class SubscriptionController extends Controller
             $subscription->user_limit = $request->user_limit;
             $subscription->client_limit = $request->client_limit;
             $subscription->enabled_logged_history = isset($request->enabled_logged_history) ? 1 : 0;
+            $subscription->trial_enabled = isset($request->trial_enabled) ? 1 : 0;
+            $subscription->trial_days = $subscription->trial_enabled ? $request->trial_days : 0;
             $subscription->save();
 
             return redirect()->route('subscriptions.index')->with('success', __('Subscription successfully created.'));
@@ -100,6 +103,7 @@ class SubscriptionController extends Controller
                     'interval' => 'required',
                     'user_limit' => 'required',
                     'client_limit' => 'required',
+                    'trial_days' => 'required_if:trial_enabled,1|integer|min:1|max:365',
                 ]
             );
             if ($validator->fails()) {
@@ -114,6 +118,8 @@ class SubscriptionController extends Controller
             $subscription->user_limit = $request->user_limit;
             $subscription->client_limit = $request->client_limit;
             $subscription->enabled_logged_history = isset($request->enabled_logged_history) ? 1 : 0;
+            $subscription->trial_enabled = isset($request->trial_enabled) ? 1 : 0;
+            $subscription->trial_days = $subscription->trial_enabled ? $request->trial_days : 0;
             $subscription->save();
 
             return redirect()->route('subscriptions.index')->with('success', __('Subscription successfully updated.'));

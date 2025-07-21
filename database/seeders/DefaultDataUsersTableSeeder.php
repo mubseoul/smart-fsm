@@ -718,6 +718,8 @@ class DefaultDataUsersTableSeeder extends Seeder
                 'user_limit' => 10,
                 'client_limit' => 10,
                 'enabled_logged_history' => 1,
+                'trial_enabled' => 1,
+                'trial_days' => 30,
             ];
             \App\Models\Subscription::create($subscriptionData);
         }

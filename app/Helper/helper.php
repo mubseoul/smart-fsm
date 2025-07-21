@@ -287,15 +287,25 @@ if (!function_exists('assignSubscription')) {
         $subscription = Subscription::find($id);
         if ($subscription) {
             \Auth::user()->subscription = $subscription->id;
-            if ($subscription->interval == 'Monthly') {
-                \Auth::user()->subscription_expire_date = Carbon::now()->addMonths(1)->isoFormat('YYYY-MM-DD');
-            } elseif ($subscription->interval == 'Quarterly') {
-                \Auth::user()->subscription_expire_date = Carbon::now()->addMonths(3)->isoFormat('YYYY-MM-DD');
-            } elseif ($subscription->interval == 'Yearly') {
-                \Auth::user()->subscription_expire_date = Carbon::now()->addYears(1)->isoFormat('YYYY-MM-DD');
+            
+            // Use trial settings if enabled, otherwise use regular interval
+            if ($subscription->hasTrialEnabled()) {
+                \Auth::user()->subscription_expire_date = Carbon::now()->addDays($subscription->trial_days)->isoFormat('YYYY-MM-DD');
             } else {
-                \Auth::user()->subscription_expire_date = Carbon::now()->addMonths(1)->isoFormat('YYYY-MM-DD');
+                // Regular subscription intervals
+                if ($subscription->interval == 'Monthly') {
+                    \Auth::user()->subscription_expire_date = Carbon::now()->addMonths(1)->isoFormat('YYYY-MM-DD');
+                } elseif ($subscription->interval == 'Quarterly') {
+                    \Auth::user()->subscription_expire_date = Carbon::now()->addMonths(3)->isoFormat('YYYY-MM-DD');
+                } elseif ($subscription->interval == 'Yearly') {
+                    \Auth::user()->subscription_expire_date = Carbon::now()->addYears(1)->isoFormat('YYYY-MM-DD');
+                } elseif ($subscription->interval == 'Unlimited') {
+                    \Auth::user()->subscription_expire_date = null; // No expiry for unlimited
+                } else {
+                    \Auth::user()->subscription_expire_date = Carbon::now()->addMonths(1)->isoFormat('YYYY-MM-DD');
+                }
             }
+            
             \Auth::user()->save();
 
             $users = User::where('parent_id', '=', parentId())->whereNotIn('type', ['super admin', 'owner'])->get();
@@ -336,15 +346,25 @@ if (!function_exists('assignManuallySubscription')) {
         $subscription = Subscription::find($id);
         if ($subscription) {
             $owner->subscription = $subscription->id;
-            if ($subscription->interval == 'Monthly') {
-                $owner->subscription_expire_date = Carbon::now()->addMonths(1)->isoFormat('YYYY-MM-DD');
-            } elseif ($subscription->interval == 'Quarterly') {
-                $owner->subscription_expire_date = Carbon::now()->addMonths(3)->isoFormat('YYYY-MM-DD');
-            } elseif ($subscription->interval == 'Yearly') {
-                $owner->subscription_expire_date = Carbon::now()->addYears(1)->isoFormat('YYYY-MM-DD');
+            
+            // Use trial settings if enabled, otherwise use regular interval
+            if ($subscription->hasTrialEnabled()) {
+                $owner->subscription_expire_date = Carbon::now()->addDays($subscription->trial_days)->isoFormat('YYYY-MM-DD');
             } else {
-                $owner->subscription_expire_date = Carbon::now()->addMonths(1)->isoFormat('YYYY-MM-DD');
+                // Regular subscription intervals
+                if ($subscription->interval == 'Monthly') {
+                    $owner->subscription_expire_date = Carbon::now()->addMonths(1)->isoFormat('YYYY-MM-DD');
+                } elseif ($subscription->interval == 'Quarterly') {
+                    $owner->subscription_expire_date = Carbon::now()->addMonths(3)->isoFormat('YYYY-MM-DD');
+                } elseif ($subscription->interval == 'Yearly') {
+                    $owner->subscription_expire_date = Carbon::now()->addYears(1)->isoFormat('YYYY-MM-DD');
+                } elseif ($subscription->interval == 'Unlimited') {
+                    $owner->subscription_expire_date = null; // No expiry for unlimited
+                } else {
+                    $owner->subscription_expire_date = Carbon::now()->addMonths(1)->isoFormat('YYYY-MM-DD');
+                }
             }
+            
             $owner->save();
 
             $users = User::where('parent_id', '=', parentId())->whereNotIn('type', ['super admin', 'owner'])->get();
@@ -1195,8 +1215,8 @@ if (!function_exists('HomePageSection')) {
                                         <h2 class="mt-4">Extended</h2>
                                         <p class="mt-5">
                                             You are licensed to use the CONTENT to create one end product for yourself or for one
-                                            client (a “single
-                                            application”), and
+                                            client (a "single
+                                            application"), and
                                             the end product may be sold or distributed for free.
                                         </p>
                                         <div class="price-price">

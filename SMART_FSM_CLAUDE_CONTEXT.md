@@ -449,6 +449,109 @@ $subscriptionData = [
 
 This subscription system provides complete SaaS functionality with flexible pricing, multiple payment options, and granular access control while maintaining multi-tenant data isolation.
 
+## Trial System Implementation
+
+### Overview
+
+Smart FSM includes a comprehensive **trial system** that allows admins to control trial periods for subscription packages. The system provides both **global trial settings** and **per-subscription trial configuration**.
+
+### Database Structure
+
+**Subscriptions Table Fields:**
+
+-   `trial_enabled`: Integer (1 = enabled, 0 = disabled)
+-   `trial_days`: Integer (1-365 days for trial period)
+
+### Admin Control Features
+
+#### Global Trial Settings (Super Admin)
+
+**Location**: Settings → General Settings → Trial System Settings
+**Fields:**
+
+-   **Enable Trial System**: Global on/off toggle for trial functionality
+-   **Default Trial Days**: Default trial period for new subscriptions (1-365 days)
+
+**Settings Storage:**
+
+```php
+'trial_system_enabled' => 'on/off'     // Global trial system toggle
+'default_trial_days' => '30'           // Default trial days
+```
+
+#### Per-Subscription Trial Settings
+
+**Location**: Subscriptions → Create/Edit Package
+**Fields:**
+
+-   **Enable Trial Period**: Per-subscription trial toggle
+-   **Trial Days**: Custom trial duration (1-365 days)
+
+### Model Methods
+
+**Subscription Model Methods:**
+
+```php
+$subscription->hasTrialEnabled()           // Check if trial is enabled
+$subscription->getTrialDays()              // Get trial days (0 if disabled)
+$subscription->getTrialDurationText()      // Human readable format
+```
+
+### Trial Logic Implementation
+
+#### Registration Process
+
+```php
+// Get default subscription and calculate trial expiry
+$defaultSubscription = Subscription::find(1);
+$trialDays = $defaultSubscription->getTrialDays();
+$subscriptionExpireDate = $trialDays > 0
+    ? Carbon::now()->addDays($trialDays)
+    : Carbon::now()->addMonths(1); // fallback
+```
+
+#### Subscription Assignment
+
+```php
+// assignSubscription() helper function logic
+if ($subscription->hasTrialEnabled()) {
+    $user->subscription_expire_date = Carbon::now()->addDays($subscription->trial_days);
+} else {
+    // Use regular interval (Monthly/Quarterly/Yearly/Unlimited)
+}
+```
+
+### User Interface Features
+
+#### Subscription Display
+
+-   **Pricing Table**: Shows trial badges and duration
+-   **Package Cards**: Display "X days Free Trial" labels
+-   **Features List**: Includes "Trial Period" as a feature comparison
+
+#### Admin Management
+
+-   **Create/Edit Forms**: Trial settings with JavaScript validation
+-   **Settings Page**: Global trial system configuration
+-   **Validation**: Trial days required when trial enabled (1-365 days)
+
+### Key Benefits
+
+1. **Flexible Trial Management**: Admins can enable/disable trials per subscription
+2. **Custom Trial Periods**: Different trial durations for different packages
+3. **Global Control**: System-wide trial settings for consistency
+4. **User Experience**: Clear trial indicators throughout the interface
+5. **Automatic Calculation**: Trial expiry dates calculated automatically
+
+### Integration Points
+
+**Registration Controller**: Uses trial settings for new user expiry dates
+**Helper Functions**: `assignSubscription()` and `assignManuallySubscription()` handle trial logic
+**Subscription Views**: Display trial information in pricing tables
+**Settings Management**: Global trial configuration in admin settings
+
+This trial system provides complete flexibility for SaaS trial management while maintaining the existing subscription structure and multi-tenant isolation.
+
 ## Critical System Concepts
 
 ### Multi-Tenancy Hierarchy

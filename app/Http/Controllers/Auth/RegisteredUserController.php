@@ -58,6 +58,16 @@ class RegisteredUserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
+        
+        // Get default subscription (Basic plan)
+        $defaultSubscription = \App\Models\Subscription::find(1);
+        
+        // Calculate trial expiry date based on subscription settings
+        $trialDays = $defaultSubscription ? $defaultSubscription->getTrialDays() : 30;
+        $subscriptionExpireDate = $trialDays > 0 
+            ? Carbon::now()->addDays($trialDays)->isoFormat('YYYY-MM-DD')
+            : Carbon::now()->addMonths(1)->isoFormat('YYYY-MM-DD'); // fallback
+        
         $userData = [
             'name' => $request->name,
             'email' => $request->email,
@@ -65,7 +75,7 @@ class RegisteredUserController extends Controller
             'type' => 'owner',
             'lang' => 'english',
             'subscription' => 1,
-            'subscription_expire_date' => Carbon::now()->addMonths(1)->isoFormat('YYYY-MM-DD'),
+            'subscription_expire_date' => $subscriptionExpireDate,
             'parent_id' => 1,
         ];
         $owner_email_verification = getSettingsValByName('owner_email_verification');

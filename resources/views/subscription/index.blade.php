@@ -35,7 +35,7 @@
                 <div class="table-responsive">
                     <div class="price-card2">
                         @php
-                            $features = [__('User Limit'),__('Client Limit'), __('Enabled Logged History'), __('Coupon Applicable')];
+                            $features = [__('User Limit'),__('Client Limit'), __('Trial Period'), __('Enabled Logged History'), __('Coupon Applicable')];
                         @endphp
                         <table class="table table-striped m-0">
                             <thead>
@@ -52,6 +52,11 @@
                                                         <span>/{{ $subscription->interval }}</span>
                                                     </b>
                                                 </h3>
+                                                @if($subscription->hasTrialEnabled())
+                                                    <small class="text-success">
+                                                        <i class="ti ti-gift"></i> {{ $subscription->getTrialDurationText() }} Free Trial
+                                                    </small>
+                                                @endif
                                             </div>
                                         </th>
                                     @endforeach
@@ -65,10 +70,22 @@
                                             <td class="text-center">
                                                 @switch($feature)
                                                     @case(__('User Limit'))
-                                                        {{ $subscription->user_limit }}
+                                                        {{ $subscription->user_limit == 0 ? __('Unlimited') : $subscription->user_limit }}
                                                     @break
                                                     @case(__('Client Limit'))
-                                                        {{ $subscription->client_limit }}
+                                                        {{ $subscription->client_limit == 0 ? __('Unlimited') : $subscription->client_limit }}
+                                                    @break
+
+                                                    @case(__('Trial Period'))
+                                                        @if ($subscription->hasTrialEnabled())
+                                                            <span class="badge bg-success">
+                                                                {{ $subscription->getTrialDurationText() }}
+                                                            </span>
+                                                        @else
+                                                            <span class="badge bg-secondary">
+                                                                {{ __('No Trial') }}
+                                                            </span>
+                                                        @endif
                                                     @break
 
                                                     @case(__('Enabled Logged History'))

@@ -3,7 +3,7 @@
     $settings = settings();
 @endphp
 @section('tab-title')
-    {{ __('Register') }}
+    {{ __('Become a Provider') }}
 @endsection
 @push('script-page')
     @if ($settings['google_recaptcha'] == 'on')
@@ -16,8 +16,8 @@
             <div class="row">
                 <div class="d-flex justify-content-center">
                     <div class="auth-header">
-                        <h2 class="text-secondary"><b>{{ __('Sign up') }} </b></h2>
-                        <p class="f-16 mt-2">{{ __('Enter your details and create account') }}</p>
+                        <h2 class="text-secondary"><b>{{ __('Become a Provider') }} </b></h2>
+                        <p class="f-16 mt-2">{{ __('Join our platform and start managing your field service business') }}</p>
                     </div>
                 </div>
             </div>
@@ -96,7 +96,7 @@
                 @endif
             @endif
             <div class="d-grid mt-4">
-                <button type="submit" class="btn btn-secondary p-2">{{ __('Sign Up') }}</button>
+                <button type="submit" class="btn btn-secondary p-2">{{ __('Start Your Journey') }}</button>
             </div>
             <hr />
             <h5 class="d-flex justify-content-center">{{__('Already have an account?')}} <a class="ms-1 text-secondary"

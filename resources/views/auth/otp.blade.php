@@ -122,7 +122,7 @@ input[type=number] {
             @if ($registerPage == 'on')
                 <hr />
                 <h5 class="d-flex justify-content-center">{{ __("Don't Have An Account?") }} <a
-                        class="ms-1 text-secondary" href="{{ route('register') }}">{{ __('Create an account') }}</a>
+                        class="ms-1 text-secondary" href="{{ route('register') }}">{{ __('Become a Provider') }}</a>
                 </h5>
             @endif
             {{ Form::close() }}

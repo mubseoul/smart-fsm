@@ -306,6 +306,14 @@
                             </ul>
                         </li>
                     @endif
+                    @if (Gate::check('manage categories'))
+                        <li class="pc-item {{ in_array($routeName, ['categories.index']) ? 'active' : '' }}">
+                            <a href="{{ route('categories.index') }}" class="pc-link">
+                                <span class="pc-micon"><i class="ti ti-layout-rows"></i></span>
+                                <span class="pc-mtext">{{ __('Categories') }}</span>
+                            </a>
+                        </li>
+                    @endif
                     @if (Gate::check('manage account settings') ||
                             Gate::check('manage password settings') ||
                             Gate::check('manage general settings') ||

@@ -131,4 +131,69 @@ class User extends Authenticatable
 
         return $return;
     }
+
+    /**
+     * Get the business profile associated with the user
+     */
+    public function businessProfile()
+    {
+        return $this->hasOne(BusinessProfile::class);
+    }
+
+    /**
+     * Get the KYC document associated with the user
+     */
+    public function kycDocument()
+    {
+        return $this->hasOne(KycDocument::class);
+    }
+
+    /**
+     * Check if user has completed business profile
+     */
+    public function hasCompletedBusinessProfile()
+    {
+        return $this->businessProfile && $this->businessProfile->isComplete();
+    }
+
+    /**
+     * Check if user has approved KYC
+     */
+    public function hasApprovedKyc()
+    {
+        return $this->kycDocument && $this->kycDocument->isApproved();
+    }
+
+    /**
+     * Get the registration completion percentage
+     */
+    public function getRegistrationProgress()
+    {
+        $steps = 0;
+        $completed = 0;
+
+        // Step 1: Basic info (always completed if user exists)
+        $steps++;
+        $completed++;
+
+        // Step 2: Business profile
+        $steps++;
+        if ($this->hasCompletedBusinessProfile()) {
+            $completed++;
+        }
+
+        // Step 3: KYC (optional, but counts if started)
+        if ($this->kycDocument) {
+            $steps++;
+            if ($this->kycDocument->isApproved()) {
+                $completed++;
+            }
+        }
+
+        return [
+            'percentage' => $steps > 0 ? round(($completed / $steps) * 100) : 0,
+            'completed_steps' => $completed,
+            'total_steps' => $steps,
+        ];
+    }
 }

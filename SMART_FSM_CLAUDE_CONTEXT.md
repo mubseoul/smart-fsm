@@ -141,6 +141,67 @@ Super Admin (parent_id: 0)
 -   `owner_email_verification`: Email verification requirement
 -   SMTP settings: For email sending
 
+## Multi-Step Registration System
+
+The registration process has been redesigned as a modern three-step provider onboarding flow:
+
+### Registration Flow
+
+1. **Step 1 - Basic Information**: Name, Email, Password, Phone
+2. **Step 2 - Business Information**: Business Type (dropdown), Service Location, Logo, Bio
+3. **Step 3 - KYC Verification**: Optional identity verification documents
+
+### Business Type Selection
+
+-   **Implementation**: HTML select dropdown with 21 predefined service categories
+-   **Categories**: Plumbing, Electrical, HVAC, Cleaning, Landscaping, Pest Control, Appliance Repair, Handyman, Roofing, Painting, Flooring, Security, Automotive, Pool & Spa, Locksmith, Moving, Carpet Cleaning, Window Cleaning, Junk Removal, Tree Services, Other
+-   **Storage**: Single string value in `business_profiles.business_type`
+-   **Validation**: Required field with server-side validation
+
+### Service Location System
+
+-   **Purpose**: Captures structured business location data instead of free-form service areas
+-   **Fields**:
+    -   `service_country`: Country code (2-character, required)
+    -   `service_zipcode`: Zip/postal code (required)
+    -   `service_city`: City name (required)
+    -   `service_address`: Street address (required)
+-   **Countries Supported**: 80+ countries with full localization
+-   **Database**: Stored in `business_profiles` table with individual columns
+-   **Display**: `getFullServiceLocationAttribute()` method formats complete address
+
+### Database Structure
+
+```sql
+-- business_profiles table
+service_country VARCHAR(2) -- Country code (US, CA, GB, etc.)
+service_zipcode VARCHAR(20) -- Zip/postal code
+service_city VARCHAR(100) -- City name
+service_address VARCHAR(255) -- Street address
+```
+
+### Technical Implementation
+
+-   **Frontend**: Multi-step form with progress indicator and client-side validation
+-   **Backend**: Comprehensive validation in `RegisteredUserController`
+-   **Models**: `BusinessProfile` with location helper methods
+-   **Assets**: Separate CSS/JS files for maintainability
+-   **Theme Integration**: Uses project's CSS custom properties for consistent styling
+
+### Form Features
+
+-   **Progressive Disclosure**: Three clear steps with navigation
+-   **File Uploads**: Drag-and-drop for business logo and KYC documents
+-   **Responsive Design**: Mobile-friendly layout with Bootstrap grid
+-   **Validation**: Real-time client-side + server-side validation
+-   **Accessibility**: Form labels, ARIA attributes, keyboard navigation
+
+### Migration Path
+
+-   Migration `2025_07_21_211500_update_business_profiles_service_location` updates table structure
+-   Removes old `service_area` JSON field
+-   Adds new structured location columns
+
 ## Company Information Management
 
 ### How Owners Save Company Information

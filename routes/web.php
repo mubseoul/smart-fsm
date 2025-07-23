@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\AuthPageController;
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
@@ -361,5 +362,14 @@ Route::group(
 
 Route::get('page/{slug}', [PageController::class, 'page'])->name('page');
 //-------------------------------FAQ-------------------------------------------
+
+//-------------------------------Category-------------------------------------------
+Route::resource('categories', CategoryController::class)->middleware(
+    [
+        'auth',
+        'XSS',
+    ]
+);
+
 Route::impersonate();
 

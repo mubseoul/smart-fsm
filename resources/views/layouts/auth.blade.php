@@ -56,6 +56,9 @@
 		    @endif
 
     <link href="{{ asset('css/custom.css') }} " rel="stylesheet">
+    
+    <!-- Page-specific CSS -->
+    @stack('css-page')
 </head>
 
 <body        	data-pc-preset="{{ !empty($settings['color_type']) && $settings['color_type'] == 'custom' ? 'custom' : $settings['accent_color'] }}" data-pc-sidebar-theme="light"

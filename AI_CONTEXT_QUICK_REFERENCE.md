@@ -181,14 +181,19 @@ WorkOrder::where('parent_id', parentId())->get();
 // Multi-tenant data isolation via parent_id
 ```
 
-## 🚀 Registration Flow
+### 🔐 Registration & Authentication
 
-1. Check `register_page` setting
-2. Validate (reCAPTCHA optional)
-3. Create user with `type: 'owner'`
-4. Auto-login + assign owner role
-5. Create default templates/roles
-6. Email verification (optional)
+-   **Theme**: "Become a Provider" (professional service provider onboarding)
+-   **Flow**: 3-step registration process
+    1. **Basic Info**: Name, Email, Password, Phone
+    2. **Business Info**: Business Type (dropdown), Service Location, Logo, Bio
+    3. **KYC**: Optional identity verification (skippable)
+-   **Business Types**: 21 predefined categories (dropdown selection)
+-   **Service Location**: Structured fields (Country, Zip, City, Address) - 80+ countries supported
+-   **Database**: Separate tables (`business_profiles`, `kyc_documents`) linked to `users`
+-   **Assets**: External CSS/JS files (`multi-step-registration.css/js`)
+-   **Default Role**: "owner" assigned after successful registration
+-   **Email Verification**: Optional (configurable via settings)
 
 ## ⚙️ Key Settings
 

@@ -445,6 +445,22 @@ class DefaultDataUsersTableSeeder extends Seeder
                     'name' => 'show invoice',
                     'guard_name' => 'web',
                 ],
+                [
+                    'name' => 'manage categories',
+                    'guard_name' => 'web',
+                ],
+                [
+                    'name' => 'create categories',
+                    'guard_name' => 'web',
+                ],
+                [
+                    'name' => 'edit categories',
+                    'guard_name' => 'web',
+                ],
+                [
+                    'name' => 'delete categories',
+                    'guard_name' => 'web',
+                ],
 
             ];
             Permission::insert($allPermission);
@@ -502,6 +518,10 @@ class DefaultDataUsersTableSeeder extends Seeder
                 ['name' => 'edit footer'],
                 ['name' => 'manage 2FA settings'],
                 ['name' => 'manage auth page'],
+                ['name' => 'manage categories'],
+                ['name' => 'create categories'],
+                ['name' => 'edit categories'],
+                ['name' => 'delete categories'],
 
 
             ];
